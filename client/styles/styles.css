@@ -45,7 +45,12 @@ body {
     color: green;
     line-height: 13px;
 }
-
+.refresh {
+    display: inline;
+    height: 25px;
+    width: 50px;
+    background-color: "teal";
+}
 form {
     padding: 20px;
     padding-left: 0;
