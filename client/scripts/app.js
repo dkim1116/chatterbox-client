@@ -8,7 +8,7 @@ var app={
 };
 // app.server = 'https://api.parse.com/1/classes/chatterbox'
 app.init = function(){
-  // this.fetch()
+  app.fetch()
 };
 
 app.send = function(message){
@@ -25,6 +25,7 @@ app.send = function(message){
   }
 })};
 
+//The fetched data only exists within the function
 app.fetch = function(messages){
   $.ajax({
    url: 'https://api.parse.com/1/classes/chatterbox', 
@@ -34,6 +35,9 @@ app.fetch = function(messages){
     success: function (data){
       console.log(data);
       console.log('chatterbox: Message fetched');
+      for (var i=0; i<data.results.length; i++ ){
+        app.addMessage(data.results[i]);
+      }
     },
   error: function (data){
     console.error('chatterbox: Failed to fetch message');
@@ -41,23 +45,18 @@ app.fetch = function(messages){
 })};
 
 app.clearMessages = function (){
-  // $.ajax({
-  //  type: 'DELETE',
-  //  contentType: 'application/json',
-  //  success: function(){
-  $('#chats').empty()
-
-    //} 
-  //})
+  $('#chats').empty();
 };
 
 //Passed in argument is an object
 app.addMessage = function (message){
-  $message = $('<div class="chat"></div>');
-
+  $message = $('<p class="chat"></p>');
+  $username = $('<div class= "username"></div>');
+  $username.append(message.username);
   //Grab the 'text' key's value from the message object
   $message.append(message.text);
-  $("#chats").append($message)
+  $username.append($message)
+  $("#chats").append($username);
 };
 
 //Passed in argument is a string
@@ -69,9 +68,13 @@ app.addRoom = function (roomName){
  $("#roomSelect").append($newRoom);
 };
 
-app.addFriend = function(){
-
+app.addFriend = function(name){
+ console.log(name)
 }
+
+app.handleSubmit = function(){
+
+};
 
 var message = {
   username: 'shawndrost',
@@ -79,27 +82,46 @@ var message = {
   roomname: '4chan'
 };
 
-
-$('.refresh').on('click', function(){
-  app.clearMessages()
-
+$(document).ready(function(){
+// If things break, wrap this inside
+// dom ready jquery function
+$('.refresh').on('click', function(event){
+  event.preventDefault();
+  app.clearMessages();
+  app.fetch();
 });
 
 
+
+
+
+// STILL NEED to capture the data from the input
+
+$('body').on('click', '.submit', function(event){
+  event.preventDefault();
+//  console.log(this[0],'value')
+  //console.log('hello')
+  console.log($(this));
+  // app.handleSubmit();
+})
+
+$('body').on('click', '.username', function(event){
+  event.preventDefault();
+//  console.log(this[0],'value')
+  //console.log('hello')
+  app.addFriend($(this)[0].childNodes[0].data);
+})
 // LEFT OFF HERE!!!!!
-var objFetched = app.fetch();
+// app.fetch();
 // returns and array of objects
-console.log(objFetched)
 // iterate the fetched results( which are objects) and invoke addMessage on each one
-for (var i=0; i<objFetched.results.length; i++ ){
-  app.addMessage(objFetched.results[i]);
-}
+
+
+app.init()
 
 
 
-
-
-
+})
 
 
 
