@@ -1,7 +1,15 @@
 // YOUR CODE HERE:
+// app.init()
 
-app={};
-app.init = function(){};
+  // Parse.initialize(this)
+var app={
+  server:'https://api.parse.com/1/classes/chatterbox'
+  // this.init()
+};
+// app.server = 'https://api.parse.com/1/classes/chatterbox'
+app.init = function(){
+  // this.fetch()
+};
 
 app.send = function(message){
   $.ajax({
@@ -17,13 +25,14 @@ app.send = function(message){
   }
 })};
 
-app.fetch = function(message){
+app.fetch = function(messages){
   $.ajax({
-   // url: 'https://api.parse.com/1/classes/chatterbox', 
+   url: 'https://api.parse.com/1/classes/chatterbox', 
   type: 'GET',
-  data: JSON.stringify(message),
-  contentType: 'application/json',
+  data: {},
+  // contentType: 'application/json',
     success: function (data){
+      console.log(data);
       console.log('chatterbox: Message fetched');
     },
   error: function (data){
@@ -49,7 +58,6 @@ app.addMessage = function (message){
   //Grab the 'text' key's value from the message object
   $message.append(message.text);
   $("#chats").append($message)
-  $('#chats').append($('<div>testing</div>'))
 };
 
 //Passed in argument is a string
@@ -71,8 +79,39 @@ var message = {
   roomname: '4chan'
 };
 
-$('.refresh').on('Click', function(){
-  
+
+$('.refresh').on('click', function(){
+  app.clearMessages()
+
+});
+
+
+// LEFT OFF HERE!!!!!
+var objFetched = app.fetch();
+// returns and array of objects
+console.log(objFetched)
+// iterate the fetched results( which are objects) and invoke addMessage on each one
+for (var i=0; i<objFetched.results.length; i++ ){
+  app.addMessage(objFetched.results[i]);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
