@@ -3,6 +3,7 @@
 
   // Parse.initialize(this)
 var app={
+  // was added to pass the spec Runner, but not required for fetch, fetch has its own url line for the server address
   server:'https://api.parse.com/1/classes/chatterbox'
   // this.init()
 };
@@ -13,7 +14,7 @@ app.init = function(){
 
 app.send = function(message){
   $.ajax({
-  url: 'https://api.parse.com/1/classes/chatterbox',
+  url: app.server,
   type: 'POST',
   data: JSON.stringify(message),
   contentType: 'application/json',
@@ -28,7 +29,7 @@ app.send = function(message){
 //The fetched data only exists within the function
 app.fetch = function(messages){
   $.ajax({
-   url: 'https://api.parse.com/1/classes/chatterbox', 
+   url: app.server, 
   type: 'GET',
   data: {},
   // contentType: 'application/json',
@@ -52,9 +53,10 @@ app.clearMessages = function (){
 app.addMessage = function (message){
   $message = $('<p class="chat"></p>');
   $username = $('<div class= "username"></div>');
-  $username.append(message.username);
+  //Defense against Nick //Escape/ignore special characgters inside received message
+  $username.text(message.username);
   //Grab the 'text' key's value from the message object
-  $message.append(message.text);
+  $message.text(message.text);
   $username.append($message)
   $("#chats").append($username);
 };
@@ -72,8 +74,8 @@ app.addFriend = function(name){
  console.log(name)
 }
 
-app.handleSubmit = function(){
-
+app.handleSubmit = function(message){
+  app.send(message);
 };
 
 var message = {
@@ -99,10 +101,15 @@ $('.refresh').on('click', function(event){
 
 $('body').on('click', '.submit', function(event){
   event.preventDefault();
-//  console.log(this[0],'value')
-  //console.log('hello')
-  console.log($(this));
-  // app.handleSubmit();
+
+  var submittedMsgObj = {
+    //edit user name later
+    username: window.location.search,
+    text: $('#message').val(),
+    roomname: "TBA"
+  };
+
+  app.handleSubmit(submittedMsgObj);
 })
 
 $('body').on('click', '.username', function(event){
