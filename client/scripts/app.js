@@ -36,9 +36,10 @@ app.fetch = function(messages){
     success: function (data){
       console.log(data);
       console.log('chatterbox: Message fetched');
-      for (var i=0; i<data.results.length; i++ ){
+      for (var i=0; i<100; i++ ){
         app.addMessage(data.results[i]);
       }
+      app.roomMaker(data);
     },
   error: function (data){
     console.error('chatterbox: Failed to fetch message');
@@ -77,6 +78,31 @@ app.addFriend = function(name){
 app.handleSubmit = function(message){
   app.send(message);
 };
+
+app.roomMaker = function(data){
+  var differentRooms = [];
+  for (var i = 0; i < 100; i++) {
+    differentRooms.push(data.results[i].roomname);
+  }
+  for (var i=0; i<differentRooms.length; i++){
+    var $room = $('<div></div>');
+    $('#roomSelect').append($room);
+  }
+  console.log(differentRooms)
+  var cleanUp = function(array){
+    var result = {};
+      for (var i = 0; i < array.length; i++) {
+        if(array[i] && array[i] !== 'null'){
+          result[array[i]]=true;
+        }
+      };
+    console.log(result)
+    return result;
+  }
+  cleanUp(differentRooms)
+}
+
+
 
 var message = {
   username: 'shawndrost',

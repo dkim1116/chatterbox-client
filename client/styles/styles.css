@@ -45,6 +45,13 @@ body {
     color: green;
     line-height: 13px;
 }
+
+#roomSelect {
+    height: 300px;
+    width: 300px;
+    color: "red";
+    background-color: "teal";
+}
 .refresh {
     display: inline;
     height: 25px;
